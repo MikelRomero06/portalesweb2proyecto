@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('pedidos', function (Blueprint $table) {
+            $table->id('id_pedido');
+            $table->foreignId('id_usuario')
+                ->constrained('usuarios', 'id_usuario')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->string('direccion_entrega', 255)->nullable();
+            $table->dateTime('fecha_pedido')->useCurrent();
+            $table->dateTime('fecha_entrega');
+            $table->string('estado', 20)->default('pendiente');
+            $table->decimal('total', 10, 2);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('pedidos');
+    }
+};
